@@ -7,6 +7,9 @@ module.exports.HTTP_STATUS = {
     CREATED: 201,
     BAD_REQUEST: 400,
     UNAUTHORIZED: 401,
-    INTERNAL_SERVER: 500
-}
+    NOT_FOUND: 404,
+};
+
+// <---BCRYPT_SALT_ROUNDS--->
+module.exports.BCRYPT_SALT_ROUNDS = 10;
 
