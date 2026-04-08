@@ -4,15 +4,18 @@ const { registerUser, loginUser, getCurrentUser, logoutUser, refreshToken } = re
 const authMiddleware = require('../middlewares/auth.middleware')
 const { registerValidation, loginValidation } = require('../validations/auth.validation')
 const validate = require('../middlewares/validation.result.middleware')
+const { registerLimiter, loginLimiter } = require('../middlewares/ratelimit.middleware')
 
 
 authRoute.post('/register',
+    registerLimiter,
     registerValidation,
     validate,
     registerUser
 );
 
 authRoute.post('/login',
+    loginLimiter,
     loginValidation,
     validate,
     loginUser
