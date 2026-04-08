@@ -1,7 +1,8 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
-const swaggerUi = require("swagger-ui-express");
+const swaggerUi = require('swagger-ui-express');
+const helmet = require('helmet')
 
 const authRoute = require('./routes/auth.route');
 
@@ -18,6 +19,7 @@ app.use(corsMiddleware);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
+app.use(helmet())
 app.use((req, res, next) => {
     if (req.originalUrl.startsWith("/api/docs")) {
         return next();
