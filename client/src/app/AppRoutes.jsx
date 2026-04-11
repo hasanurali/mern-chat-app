@@ -1,6 +1,6 @@
 import React from 'react'
 import { Routes, Route } from "react-router-dom"
-import { Login, Register } from '../features/auth/index'
+import { Login, Register } from '@/features/index'
 
 const AppRoutes = () => {
     return (
