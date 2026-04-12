@@ -9,8 +9,17 @@ import { IoCallOutline } from "react-icons/io5";
 import AuthFeatureCard from '../components/AuthFeatureCard'
 import { GoShieldLock } from "react-icons/go";
 import { TbMessageBolt } from "react-icons/tb";
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
+import { useState } from "react";
 
 const Register = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword)
+  };
+
   return (
     <>
       <div className='bg-linear-to-br from-[#f5f3ff] via-[#ede9fe] to-[#e0e7ff] min-h-screen pb-10 min-[1200px]:pb-5'>
@@ -72,8 +81,10 @@ const Register = () => {
 
                 <div className='text-[#555881] flex flex-col gap-1 min-[600px]:gap-2 relative'>
                   <label htmlFor="password" className='pl-3 font-semibold min-[600px]:text-lg min-[1200px]:text-md'>Password</label>
-                  <Input type="password" placeholder='• • • • • • • •' id='password' className='px-3 py-3 rounded-full bg-[#F8F9FD] min-[770px]:bg-[#F1EFFF] border border-[#ECE9F9] outline-blue-500 focus:shadow-xs focus:shadow-blue-400 pl-11' />
+                  <Input type={showPassword ? "text" : "password"} placeholder='• • • • • • • •' id='password' className='px-3 py-3 rounded-full bg-[#F8F9FD] min-[770px]:bg-[#F1EFFF] border border-[#ECE9F9] outline-blue-500 focus:shadow-xs focus:shadow-blue-400 pl-11 pr-10' />
                   <MdLockOutline className='absolute top-10.5 min-[600px]:top-12.5 left-4' size={20} />
+                  {showPassword ? <FaRegEye onClick={handleShowPassword} className="absolute right-4 bottom-3.5 cursor-pointer" size={20} /> :
+                    <FaRegEyeSlash onClick={handleShowPassword} className="absolute right-4 bottom-3.5 cursor-pointer" size={20} />}
                 </div>
 
                 <div className='mt-3 flex flex-col gap-3'>
@@ -83,7 +94,7 @@ const Register = () => {
 
               </form>
             </section>
-            <section className='mt-5 flex gap-4 min-[770px]:hidden'>    
+            <section className='mt-5 flex gap-4 min-[770px]:hidden'>
               <AuthFeatureCard icon={<TbMessageBolt size={22} color='#8E3A8A' />} title='High-Speed Messaging' />
               <AuthFeatureCard icon={<GoShieldLock size={22} color='#0050D4' />} title='End-to-End Privacy' bg='bg-[#E0E0FF]' circleColor='bg-[#CAD2FB]' circlePosition='-top-6 -right-6' />
             </section>
