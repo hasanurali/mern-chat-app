@@ -40,7 +40,7 @@ const Register = () => {
           </div>
 
           <div className='max-[1200px]:max-w-192.5 min-[1200px]:min-w-120 px-7 min-[600px]:px-15 min-[1200px]:px-10 pt-7 min-[600px]:pt-15 min-[1200px]:pt-9 flex flex-col gap-6 min-[600px]:gap-10 min-[1200px]:gap-6 overflow-y-auto pb-10 min-[1200px]:pb-5 relative overflow-hidden 
-         min-[770px]:bg-[#F8F9FD] rounded-xl min-[1200px]:rounded-r-4xl max-[1199px]:m-auto min-[770px]:mt-20 min-[1200px]:mt-10'>
+         min-[770px]:bg-[#F8F9FD] max-[1200px]:rounded-xl min-[1200px]:rounded-r-4xl max-[1199px]:m-auto min-[770px]:mt-20 min-[1200px]:mt-10'>
 
             <div className="absolute top-8 right-8 w-24 h-24 
               bg-purple-300/30 rounded-full blur-2xl min-[770px]:hidden"></div>
