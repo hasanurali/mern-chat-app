@@ -1,8 +1,16 @@
 import logo from "@/assets/luminaLogo.svg"
 import { Input, Button } from '@/shared/index.js'
 import { Link } from 'react-router-dom'
+import { useState } from "react"
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa"
 
 const Login = () => {
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleShowPassword = () => {
+        setShowPassword(!showPassword)
+    };
+
     return (
         <>
             <div className='min-[430px]:bg-linear-to-br from-[#f5f3ff] via-[#ede9fe] to-[#e0e7ff] min-h-screen'>
@@ -39,7 +47,9 @@ const Login = () => {
 
                                 <div className='text-[#555881] flex flex-col gap-1 relative'>
                                     <label htmlFor="password" className='pl-3 font-semibold'>Password</label>
-                                    <Input type="password" placeholder='• • • • • • • •' id='password' className='px-5 py-3 rounded-full bg-[#F8F9FD] min-[430px]:bg-[#F1EFFF] border border-[#ECE9F9] outline-blue-500 focus:shadow-xs focus:shadow-blue-400 pr-12' />
+                                    <Input type={showPassword ? "text" : "password"} placeholder='• • • • • • • •' id='password' className='px-5 py-3 rounded-full bg-[#F8F9FD] min-[430px]:bg-[#F1EFFF] border border-[#ECE9F9] outline-blue-500 focus:shadow-xs focus:shadow-blue-400 pr-12' />
+                                    {showPassword ? <FaRegEye onClick={handleShowPassword} className="absolute right-4 bottom-3.5 cursor-pointer" size={20} /> :
+                                        <FaRegEyeSlash onClick={handleShowPassword} className="absolute right-4 bottom-3.5 cursor-pointer" size={20} />}
                                 </div>
 
                                 <div className='mt-3 flex flex-col gap-3'>
@@ -49,9 +59,7 @@ const Login = () => {
 
                             </form>
                         </section>
-
                     </div>
-
                 </div >
                 <div className='text-[#9A9BBC] text-center text-sm py-5 max-[430px]:hidden'>
                     <p>"The quality of our conversations determines the quality of our</p>
