@@ -1,6 +1,5 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const mongoSanitize = require('express-mongo-sanitize');
 const swaggerUi = require('swagger-ui-express');
 const helmet = require('helmet')
 
@@ -8,6 +7,7 @@ const authRoute = require('./routes/auth.route');
 
 const errorHandler = require('./middlewares/error.middleware');
 const corsMiddleware = require('./config/cors.config');
+const sanitizeMiddleware = require("./middlewares/sanitize.middleware");
 const { swaggerSpec } = require('./config/swagger.config')
 
 const app = express()
@@ -20,12 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(helmet())
-app.use((req, res, next) => {
-    if (req.originalUrl.startsWith("/api/docs")) {
-        return next();
-    }
-    mongoSanitize()(req, res, next);
-});
+app.use(sanitizeMiddleware);
 
 // Routes
 app.use('/api/v1/auth', authRoute);
