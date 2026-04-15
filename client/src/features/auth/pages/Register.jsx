@@ -14,11 +14,13 @@ import { FaRegEyeSlash } from "react-icons/fa";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import AuthLoader from "../components/AuthLoader";
+import { register as registerUser } from "../services/authService"
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { register, handleSubmit, reset, formState: { errors, isDirty, isSubmitting } } = useForm({
+  const { register, handleSubmit, reset, setError, formState: { errors, isDirty, isSubmitting } } = useForm({
     defaultValues: {
       name: "",
       phone: "",
@@ -32,8 +34,23 @@ const Register = () => {
   };
 
   const onSubmit = async (data) => {
-    console.log(data)
-    reset()
+    try {
+      const res = await registerUser(data)
+      console.log(res.data)
+      reset()
+    } catch (error) {
+      const errorData = error?.response?.data;
+      if (errorData.errors?.length) {
+        errorData?.errors?.forEach((e) => {
+          setError(e.path, {
+            type: "server",
+            message: e.msg,
+          });
+        });
+      } else {
+        toast.error(errorData?.message || errorData)
+      }
+    }
   };
 
   return (
