@@ -5,11 +5,13 @@ import { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import AuthLoader from "../components/AuthLoader";
+import { login } from "../services/authService"
+import { toast } from "react-toastify"
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
 
-    const { register, handleSubmit, reset, formState: { errors, isDirty, isSubmitting } } = useForm({
+    const { register, handleSubmit, reset, setError, formState: { errors, isDirty, isSubmitting } } = useForm({
         defaultValues: {
             email: "",
             password: ""
@@ -21,8 +23,25 @@ const Login = () => {
     };
 
     const onSubmit = async (data) => {
-        console.log(data)
-        reset()
+        try {
+            const res = await login(data)
+            console.log(res)
+            reset()
+        } catch (error) {
+
+            const errorData = error?.response?.data;
+            if (errorData.errors?.length) {
+                errorData?.errors?.forEach((e) => {
+                    setError(e.path, {
+                        type: "server",
+                        message: e.msg,
+                    });
+                });
+
+            } else {
+                toast.error(errorData?.message || errorData)
+            }
+        }
     };
 
     return (
