@@ -1,12 +1,14 @@
 import logo from "@/assets/luminaLogo.svg";
 import { Input, Button } from '@/shared/index.js';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import AuthLoader from "../components/AuthLoader";
 import { login } from "../services/authService"
 import { toast } from "react-toastify"
+import { useDispatch } from "react-redux"
+import { initializeUser } from "@/features/index"
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -18,6 +20,11 @@ const Login = () => {
         }
     })
 
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const location = useLocation()
+
+
     const handleShowPassword = () => {
         setShowPassword(!showPassword)
     };
@@ -25,8 +32,11 @@ const Login = () => {
     const onSubmit = async (data) => {
         try {
             const res = await login(data)
-            console.log(res)
+            dispatch(initializeUser(res.data.data))
             reset()
+            const from = location.state?.from || '/';
+            navigate(from, { replace: true })
+
         } catch (error) {
 
             const errorData = error?.response?.data;
