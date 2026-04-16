@@ -5,3 +5,8 @@ import { api, ENDPOINTS } from '@/shared/index'
 export const register = (data) => {
     return api.post(ENDPOINTS.AUTH.REGISTER, data)
 };
+
+// Login
+export const login = (data) => {
+    return api.post(ENDPOINTS.AUTH.LOGIN, data)
+}
