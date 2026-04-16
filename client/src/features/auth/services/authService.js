@@ -15,3 +15,8 @@ export const login = (data) => {
 export const refreshToken = () => {
     return api.post(ENDPOINTS.AUTH.REFRESH)
 }
+
+// Get current user
+export const getCurrentUser = () => {
+    return api.post(ENDPOINTS.AUTH.ME)
+}
