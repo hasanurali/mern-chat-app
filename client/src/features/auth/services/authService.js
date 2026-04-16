@@ -18,5 +18,5 @@ export const refreshToken = () => {
 
 // Get current user
 export const getCurrentUser = () => {
-    return api.post(ENDPOINTS.AUTH.ME)
+    return api(ENDPOINTS.AUTH.ME)
 }
