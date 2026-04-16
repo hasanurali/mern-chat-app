@@ -53,7 +53,11 @@ api.interceptors.response.use(
       } catch (refreshErr) {
 
         processQueue(refreshErr);
-        window.location.href = "/auth/login";
+
+        if (window.location.pathname !== "/auth/login") {
+          window.location.href = "/auth/login"
+        };
+
         return Promise.reject(refreshErr);
 
       } finally {
