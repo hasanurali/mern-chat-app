@@ -1,7 +1,7 @@
 import luminaLogo from "@/assets/luminaLogo.svg";
 import { Input, Button } from '@/shared/index.js';
 import sleekAbstractGlassSculptureLogo from "@/assets/SleekAbstractGlassSculpture.png";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaRegUser } from "react-icons/fa";
 import { MdLockOutline } from 'react-icons/md';
 import { FiMail } from 'react-icons/fi';
@@ -16,6 +16,8 @@ import { useForm } from "react-hook-form";
 import AuthLoader from "../components/AuthLoader";
 import { register as registerUser } from "../services/authService"
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux"
+import { initializeUser } from "@/features/index"
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -27,7 +29,11 @@ const Register = () => {
       email: "",
       password: "",
     },
-  })
+  });
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword)
@@ -35,10 +41,15 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     try {
+
       const res = await registerUser(data)
-      console.log(res.data)
+      dispatch(initializeUser(res.data.data))
       reset()
+      const from = location.state?.from || '/';
+      navigate(from, { replace: true })
+
     } catch (error) {
+
       const errorData = error?.response?.data;
       if (errorData.errors?.length) {
         errorData?.errors?.forEach((e) => {
@@ -47,6 +58,7 @@ const Register = () => {
             message: e.msg,
           });
         });
+
       } else {
         toast.error(errorData?.message || errorData)
       }
