@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Large ring -->
+  <circle cx="130" cy="70" r="40" fill="none" stroke="#1a53ff" stroke-width="20" />
+
+  <!-- Medium ring -->
+  <circle cx="45" cy="120" r="28" fill="none" stroke="#1a53ff" stroke-width="14" />
+
+  <!-- Small ring -->
+  <circle cx="100" cy="165" r="16.5" fill="none" stroke="#1a53ff" stroke-width="11" />
+</svg>
