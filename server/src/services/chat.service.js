@@ -37,3 +37,32 @@ module.exports.createOneToOneChat = async (data) => {
     const detailedChat = await chatModel.findById(newChat._id).populate(commonPopulate);
     return { chat: detailedChat, isNewChat: true };
 };
+
+module.exports.createGroupChat = async (data) => {
+
+    const { name, participants, chatAdmin } = data;
+
+
+    const isDuplicate = new Set(participants.map(id => id.toString())).size !== participants.length;
+    if (isDuplicate) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Group contains Duplicate users");
+    }
+
+    const users = await userModel.find({
+        _id: { $in: participants }
+    });
+
+    if (users.length !== participants.length) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Group contains invalid users");
+    };
+
+    const newGroupChat = await chatModel.create({
+        name,
+        isGroupChat: true,
+        participants: [chatAdmin, ...participants],
+        admin: chatAdmin
+    })
+
+    const detailedChat = await chatModel.findById(newGroupChat._id).populate(commonPopulate);
+    return detailedChat;
+};
