@@ -1,7 +1,7 @@
 const asyncHandler = require('../utils/asyncHandler')
 const ApiResponse = require('../utils/apiResponse')
 const { HTTP_STATUS } = require('../constant/index')
-const authService = require('../services/auth.service ')
+const authService = require('../services/auth.service')
 const COOKIE_CONFIGURATION = require('../config/cookie.config')
 
 module.exports.registerUser = asyncHandler(async (req, res) => {
