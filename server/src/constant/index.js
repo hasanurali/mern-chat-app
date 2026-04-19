@@ -11,3 +11,13 @@ module.exports.HTTP_STATUS = {
 // <---BCRYPT_SALT_ROUNDS--->
 module.exports.BCRYPT_SALT_ROUNDS = 10;
 
+// <---SOCKET EVENTS--->
+module.exports.ChatEventEnum = {
+    CONNECTED_EVENT: "connection",
+    DISCONNECT_EVENT: "disconnect",
+    NEW_CHAT_EVENT: "newChat",
+    JOIN_CHAT_EVENT: "joinChat",
+    LEAVE_CHAT_EVENT: "leaveChat",
+    UPDATE_GROUP_NAME_EVENT: "updateGroupName",
+    SOCKET_ERROR_EVENT: "socketError",
+};
