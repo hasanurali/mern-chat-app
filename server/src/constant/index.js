@@ -13,11 +13,17 @@ module.exports.BCRYPT_SALT_ROUNDS = 10;
 
 // <---SOCKET EVENTS--->
 module.exports.ChatEventEnum = {
+
     CONNECTED_EVENT: "connection",
     DISCONNECT_EVENT: "disconnect",
+    SOCKET_ERROR_EVENT: "socketError",
+
     NEW_CHAT_EVENT: "newChat",
+    USER_JOINED_CHAT_EVENT: "userJoinedChat",
+    USER_LEFT_CHAT_EVENT: "userLeftChat",
+    UPDATE_GROUP_NAME_EVENT: "updateGroupName",
+    DELETE_CHAT_EVENT: "deleteChat",
+
     JOIN_CHAT_EVENT: "joinChat",
     LEAVE_CHAT_EVENT: "leaveChat",
-    UPDATE_GROUP_NAME_EVENT: "updateGroupName",
-    SOCKET_ERROR_EVENT: "socketError",
 };
