@@ -26,3 +26,22 @@ module.exports.createOneToOneChat = asyncHandler(async (req, res) => {
         .json(new ApiResponse(HTTP_STATUS.CREATED, "Chat Created", chat));
 
 });
+
+module.exports.createGroupChat = asyncHandler(async (req, res) => {
+
+    const { name, participants } = req.body;
+    const chatAdmin = req.user._id
+    const io = req.app.get('io')
+
+    const chat = await chatService.createGroupChat({ name, participants, chatAdmin })
+
+    chat.participants.forEach(({ _id }) => {
+        if (!_id.equals(chatAdmin._id)) {
+            io.to(_id.toString()).emit(ChatEventEnum.NEW_CHAT_EVENT, chat)
+        }
+    });
+
+    return res.status(HTTP_STATUS.CREATED)
+        .json(new ApiResponse(HTTP_STATUS.CREATED, "Group Created", chat));
+
+});
