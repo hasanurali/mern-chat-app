@@ -18,7 +18,7 @@ module.exports.createOneToOneChat = asyncHandler(async (req, res) => {
 
     chat.participants.forEach(({ _id }) => {
         if (!_id.equals(chatCreator)) {
-            io.to(_id.toString()).emit(ChatEventEnum.JOIN_CHAT_EVENT, chat)
+            io.to(_id.toString()).emit(ChatEventEnum.NEW_CHAT_EVENT, chat)
         }
     });
 
