@@ -66,3 +66,9 @@ module.exports.createGroupChat = async (data) => {
     const detailedChat = await chatModel.findById(newGroupChat._id).populate(commonPopulate);
     return detailedChat;
 };
+
+module.exports.fetchChats = async (id) => {
+
+    const chats = await chatModel.find({ participants: id }).populate(commonPopulate);
+    return chats;
+};
