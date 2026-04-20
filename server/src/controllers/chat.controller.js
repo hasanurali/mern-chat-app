@@ -45,3 +45,14 @@ module.exports.createGroupChat = asyncHandler(async (req, res) => {
         .json(new ApiResponse(HTTP_STATUS.CREATED, "Group Created", chat));
 
 });
+
+module.exports.fetchChats = asyncHandler(async (req, res) => {
+
+    const user = req.user;
+
+    const chats = await chatService.fetchChats(user._id);
+ 
+    return res.status(HTTP_STATUS.OK)
+        .json(new ApiResponse(HTTP_STATUS.OK, "Chat fetched", chats));
+
+});
