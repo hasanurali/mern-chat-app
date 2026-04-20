@@ -9,7 +9,7 @@ module.exports.groupChatValidation = [
 
     // participants validation
     body("participants")
-        .isArray({ min: 2 }).withMessage("Participants must be an array with at least 2 users"),
+        .isArray({ min: 2, max: 50 }).withMessage("Participants must be an array with 2 to 50 users"),
 
     // each participant should be string (userId)
     body("participants.*")
