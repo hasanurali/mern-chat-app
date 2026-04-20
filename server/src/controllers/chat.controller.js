@@ -16,11 +16,7 @@ module.exports.createOneToOneChat = asyncHandler(async (req, res) => {
             .json(new ApiResponse(HTTP_STATUS.OK, "Chat fetched", chat));
     }
 
-    chat.participants.forEach(({ _id }) => {
-        if (!_id.equals(chatCreator)) {
-            io.to(_id.toString()).emit(ChatEventEnum.NEW_CHAT_EVENT, chat)
-        }
-    });
+    io.to(id.toString()).emit(ChatEventEnum.NEW_CHAT_EVENT, chat);
 
     return res.status(HTTP_STATUS.CREATED)
         .json(new ApiResponse(HTTP_STATUS.CREATED, "Chat Created", chat));
@@ -51,7 +47,7 @@ module.exports.fetchChats = asyncHandler(async (req, res) => {
     const user = req.user;
 
     const chats = await chatService.fetchChats(user._id);
- 
+
     return res.status(HTTP_STATUS.OK)
         .json(new ApiResponse(HTTP_STATUS.OK, "Chat fetched", chats));
 
