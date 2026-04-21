@@ -82,3 +82,21 @@ module.exports.joinGroupChat = asyncHandler(async (req, res) => {
         .json(new ApiResponse(HTTP_STATUS.OK, "Group joined", chat));
 
 });
+
+module.exports.leaveGroupChat = asyncHandler(async (req, res) => {
+
+    const userId = req.user._id;
+    const chatId = req.params.id;
+    const io = req.app.get('io')
+
+    await chatService.leaveGroupChat({ userId, chatId });
+
+    io.to(chatId.toString()).except(userId.toString()).emit(ChatEventEnum.LEAVE_CHAT_EVENT, {
+        chatId,
+        user: userId
+    });
+
+    return res.status(HTTP_STATUS.OK)
+        .json(new ApiResponse(HTTP_STATUS.OK, "Group leaved", { chatId }));
+
+});

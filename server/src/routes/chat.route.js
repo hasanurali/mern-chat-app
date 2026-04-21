@@ -1,7 +1,7 @@
 const express = require('express')
 const chatRoute = express.Router()
 const authMiddleware = require('../middlewares/auth.middleware')
-const { createOneToOneChat, createGroupChat, fetchChats, fetchChat } = require('../controllers/chat.controller');
+const { createOneToOneChat, createGroupChat, fetchChats, fetchChat, joinGroupChat, leaveGroupChat } = require('../controllers/chat.controller');
 const { groupChatValidation } = require('../validations/chat.validation');
 const validate = require('../middlewares/validation.result.middleware');
 
@@ -31,6 +31,11 @@ chatRoute.get('/:id',
 chatRoute.post('/join/:id',
     authMiddleware,
     joinGroupChat
+);
+
+chatRoute.post('/leave/:id',
+    authMiddleware,
+    leaveGroupChat
 );
 
 module.exports = chatRoute;

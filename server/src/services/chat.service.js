@@ -123,3 +123,24 @@ module.exports.joinGroupChat = async (data) => {
     const detailedChat = await chatModel.findByIdAndUpdate(chatId, { $push: { participants: userId } }, { returnDocument: "after" }).populate(commonPopulate);
     return detailedChat;
 };
+
+module.exports.leaveGroupChat = async (data) => {
+
+    const { userId, chatId } = data;
+
+    if (!chatId) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Group id is required");
+    };
+
+    if (!mongoose.Types.ObjectId.isValid(chatId)) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Invalid chat id");
+    };
+
+    const isChat = await chatModel.findOne({ _id: chatId, isGroupChat: true, participants: userId });
+    if (!isChat) {
+        throw new ApiError(HTTP_STATUS.NOT_FOUND, "Group not found");
+    };
+
+    await chatModel.findByIdAndUpdate(chatId, { $pull: { participants: userId } });
+    return;
+}
