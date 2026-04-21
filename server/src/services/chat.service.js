@@ -25,7 +25,7 @@ module.exports.createOneToOneChat = async (data) => {
 
     const chatName = [chatCreator, id].sort().join('_')
 
-    const isChat = await chatModel.findOne({ name: chatName, isGroupChat: false })?.populate(commonPopulate);
+    const isChat = await chatModel.findOne({ name: chatName, isGroupChat: false }).populate(commonPopulate);
     if (isChat) {
         return { chat: isChat, isNewChat: false };
     }
