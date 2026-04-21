@@ -52,3 +52,15 @@ module.exports.fetchChats = asyncHandler(async (req, res) => {
         .json(new ApiResponse(HTTP_STATUS.OK, "Chat fetched", chats));
 
 });
+
+module.exports.fetchChat = asyncHandler(async (req, res) => {
+
+    const userId = req.user._id;
+    const chatId = req.params.id;
+
+    const chat = await chatService.fetchChat({ userId, chatId });
+
+    return res.status(HTTP_STATUS.OK)
+        .json(new ApiResponse(HTTP_STATUS.OK, "Chat fetched", chat));
+
+});
