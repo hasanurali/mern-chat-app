@@ -28,4 +28,9 @@ chatRoute.get('/:id',
     fetchChat
 );
 
+chatRoute.post('/join/:id',
+    authMiddleware,
+    joinGroupChat
+);
+
 module.exports = chatRoute;

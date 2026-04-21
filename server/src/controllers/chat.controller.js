@@ -64,3 +64,21 @@ module.exports.fetchChat = asyncHandler(async (req, res) => {
         .json(new ApiResponse(HTTP_STATUS.OK, "Chat fetched", chat));
 
 });
+
+module.exports.joinGroupChat = asyncHandler(async (req, res) => {
+
+    const userId = req.user._id;
+    const chatId = req.params.id;
+    const io = req.app.get('io')
+
+    const chat = await chatService.joinGroupChat({ userId, chatId });
+
+    io.to(chatId.toString()).except(userId.toString()).emit(ChatEventEnum.USER_JOINED_CHAT_EVENT, {
+        chatId,
+        user: chat.participants[chat.participants.length - 1]
+    });
+
+    return res.status(HTTP_STATUS.OK)
+        .json(new ApiResponse(HTTP_STATUS.OK, "Group joined", chat));
+
+});

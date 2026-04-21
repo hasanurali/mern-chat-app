@@ -93,3 +93,33 @@ module.exports.fetchChat = async (data) => {
 
     return isChat;
 };
+
+module.exports.joinGroupChat = async (data) => {
+
+    const { userId, chatId } = data;
+
+    if (!chatId) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Group id is required");
+    };
+
+    if (!mongoose.Types.ObjectId.isValid(chatId)) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Invalid chat id");
+    };
+
+    const isChat = await chatModel.findOne({ _id: chatId, isGroupChat: true });
+    if (!isChat) {
+        throw new ApiError(HTTP_STATUS.NOT_FOUND, "Group not found");
+    };
+
+    const isAlreadyMember = isChat.participants.some(id => id.toString() === userId.toString());
+    if (isAlreadyMember) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "User is already a member of this group");
+    };
+
+    if (isChat.participants.length === 50) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Group is full. Maximum 50 members allowed");
+    };
+
+    const detailedChat = await chatModel.findByIdAndUpdate(chatId, { $push: { participants: userId } }, { returnDocument: "after" }).populate(commonPopulate);
+    return detailedChat;
+};
