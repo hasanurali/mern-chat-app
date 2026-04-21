@@ -2,6 +2,7 @@ const userModel = require('../models/user.model')
 const chatModel = require('../models/chat.model')
 const { HTTP_STATUS } = require('../constant/index')
 const ApiError = require('../utils/apiError')
+const mongoose = require('mongoose')
 
 
 const commonPopulate = {
@@ -71,4 +72,24 @@ module.exports.fetchChats = async (id) => {
 
     const chats = await chatModel.find({ participants: id }).populate(commonPopulate);
     return chats;
+};
+
+module.exports.fetchChat = async (data) => {
+
+    const { userId, chatId } = data;
+
+    if (!chatId) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Group id is required");
+    };
+
+    if (!mongoose.Types.ObjectId.isValid(chatId)) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Invalid chat id");
+    };
+
+    const isChat = await chatModel.findOne({ _id: chatId, participants: userId }).populate(commonPopulate);
+    if (!isChat) {
+        throw new ApiError(HTTP_STATUS.NOT_FOUND, "Chat not found");
+    };
+
+    return isChat;
 };
