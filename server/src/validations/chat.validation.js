@@ -15,3 +15,11 @@ module.exports.groupChatValidation = [
     body("participants.*")
         .isString().withMessage("Each participant must be a string")
 ]
+
+module.exports.changeGroupNameValidation = [
+
+    // name validation
+    body("name")
+        .notEmpty().withMessage("Name is required")
+        .isLength({ min: 3 }).withMessage("Name must be at least 3 characters"),
+]
