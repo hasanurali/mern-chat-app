@@ -1,7 +1,7 @@
 const express = require('express')
 const chatRoute = express.Router()
 const authMiddleware = require('../middlewares/auth.middleware')
-const { createOneToOneChat, createGroupChat, fetchChats, fetchChat, joinGroupChat, leaveGroupChat, changeGroupName } = require('../controllers/chat.controller');
+const { createOneToOneChat, createGroupChat, fetchChats, fetchChat, joinGroupChat, leaveGroupChat, changeGroupName, deleteChat } = require('../controllers/chat.controller');
 const { groupChatValidation, changeGroupNameValidation } = require('../validations/chat.validation');
 const validate = require('../middlewares/validation.result.middleware');
 
@@ -38,11 +38,16 @@ chatRoute.post('/leave/:id',
     leaveGroupChat
 );
 
-chatRoute.put('/change/:id',
+chatRoute.put('/name/:id',
     authMiddleware,
     changeGroupNameValidation,
     validate,
     changeGroupName
+);
+
+chatRoute.delete('/:id',
+    authMiddleware,
+    deleteChat
 );
 
 module.exports = chatRoute;

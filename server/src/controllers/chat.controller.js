@@ -116,3 +116,18 @@ module.exports.changeGroupName = asyncHandler(async (req, res) => {
         .json(new ApiResponse(HTTP_STATUS.OK, "Chat name updated", chat));
 
 });
+
+module.exports.deleteChat = asyncHandler(async (req, res) => {
+
+    const userId = req.user._id;
+    const chatId = req.params.id;
+    const io = req.app.get('io')
+
+    await chatService.deleteChat({ userId, chatId });
+
+    io.to(chatId.toString()).except(userId.toString()).emit(ChatEventEnum.DELETE_CHAT_EVENT, { chatId });
+
+    return res.status(HTTP_STATUS.OK)
+        .json(new ApiResponse(HTTP_STATUS.OK, "Chat deleted", { chatId }));
+
+});

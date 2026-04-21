@@ -165,3 +165,31 @@ module.exports.changeGroupName = async (data) => {
     const updatedChat = await chatModel.findByIdAndUpdate(chatId, { $set: { name: newName } }, { returnDocument: "after" });
     return updatedChat;
 }
+
+module.exports.deleteChat = async (data) => {
+
+    const { userId, chatId } = data;
+
+    if (!chatId) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Group id is required");
+    };
+
+    if (!mongoose.Types.ObjectId.isValid(chatId)) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Invalid chat id");
+    };
+
+    const isChat = await chatModel.findOne({ _id: chatId });
+    if (!isChat) {
+        throw new ApiError(HTTP_STATUS.NOT_FOUND, "Chat not found");
+    };
+
+    if (isChat?.isGroupChat && isChat?.admin.toString() !== userId.toString()) {
+        throw new ApiError(HTTP_STATUS.FORBIDDEN, "You are not authorized to delete");
+    }
+    else if (!isChat?.isGroupChat && isChat?.participants.every(id => id.toString() !== userId.toString())) {
+        throw new ApiError(HTTP_STATUS.FORBIDDEN, "You are not authorized to delete");
+    };
+
+    await chatModel.findByIdAndDelete(chatId);
+    return;
+}
