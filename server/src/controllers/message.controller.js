@@ -35,3 +35,22 @@ module.exports.fetchMessages = asyncHandler(async (req, res) => {
         .json(new ApiResponse(HTTP_STATUS.OK, "Message fetched", getMessages));
 
 });
+
+module.exports.updateMessageStatus = asyncHandler(async (req, res) => {
+
+    const chatId = req.params.id;
+    const userId = req.user._id;
+    const io = req.app.get('io')
+
+    const messages = await messageService.updateMessageStatus({ userId, chatId });
+
+    if (messages.modifiedCount > 0) {
+        io.to(chatId.toString()).except(userId.toString()).emit(ChatEventEnum.CHANGE_STATUS, { chatId });
+    };
+
+    const isUpdate = messages.modifiedCount > 0;
+
+    return res.status(HTTP_STATUS.OK)
+        .json(new ApiResponse(HTTP_STATUS.OK, "Message seened", { chatId, update: isUpdate }));
+
+});
