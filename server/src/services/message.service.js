@@ -78,3 +78,24 @@ module.exports.updateMessageStatus = async (data) => {
 
     return await messageModel.updateMany({ chat: chatId, status: "unseen" }, { $set: { status: "seen" } });
 };
+
+module.exports.deleteMessage = async (data) => {
+
+    const { userId, messageId } = data;
+
+    if (!messageId) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Group id is required");
+    };
+
+    if (!mongoose.Types.ObjectId.isValid(messageId)) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Invalid chat id");
+    };
+
+    const isMessage = await messageModel.findOne({ _id: messageId, user: userId })
+    if (!isMessage) {
+        throw new ApiError(HTTP_STATUS.NOT_FOUND, "Message not found")
+    };
+
+    await messageModel.findByIdAndDelete(messageId);
+    return isMessage?.chat;
+};

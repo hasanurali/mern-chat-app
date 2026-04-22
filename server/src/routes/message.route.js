@@ -1,7 +1,7 @@
 const express = require('express')
 const messageRoute = express.Router()
 const authMiddleware = require('../middlewares/auth.middleware')
-const { createMessage, fetchMessages, updateMessageStatus } = require('../controllers/message.controller');
+const { createMessage, fetchMessages, updateMessageStatus, deleteMessage } = require('../controllers/message.controller');
 const { createMessageValidation } = require('../validations/message.validation');
 const validate = require('../middlewares/validation.result.middleware');
 
@@ -21,6 +21,11 @@ messageRoute.get('/:id',
 messageRoute.put('/:id',
     authMiddleware,
     updateMessageStatus
+);
+
+messageRoute.delete('/:id',
+    authMiddleware,
+    deleteMessage
 );
 
 
