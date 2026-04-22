@@ -14,6 +14,9 @@ module.exports.createMessage = async (data) => {
 
     const { senderId, message, chatId, status = undefined } = data;
 
+    if (!chatId) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Group id is required");
+    };
 
     if (!mongoose.Types.ObjectId.isValid(chatId)) {
         throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Invalid chat id");
@@ -33,4 +36,25 @@ module.exports.createMessage = async (data) => {
 
     const detailedMessage = await messageModel.findById(newMessage._id).populate(commonPopulate);
     return { message: detailedMessage, chat: isChat };
+};
+
+module.exports.getMessages = async (data) => {
+
+    const { userId, chatId } = data;
+
+    if (!chatId) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Group id is required");
+    };
+
+    if (!mongoose.Types.ObjectId.isValid(chatId)) {
+        throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Invalid chat id");
+    };
+
+    const isChat = await chatModel.findById(chatId)
+    if (!isChat || isChat?.participants.every(id => id.toString() !== userId.toString())) {
+        throw new ApiError(HTTP_STATUS.NOT_FOUND, "Chat not found")
+    };
+
+    const getMessages = await messageModel.find({ chat: chatId }).populate(commonPopulate)
+    return getMessages;
 };
