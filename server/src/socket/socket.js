@@ -11,12 +11,21 @@ const io = new Server(httpServer, {
     }
 });
 
-
+const onlineUsers = {}
 
 io.on(ChatEventEnum.CONNECTED_EVENT, (socket) => {
 
     const userId = socket.handshake.query?.userId;
     if (userId) socket.join(userId);
+
+
+    // Check online
+    onlineUsers[userId] = socket.id;
+    io.emit(ChatEventEnum.CHECK_ONLINE, Object.keys(onlineUsers))
+    socket.on(ChatEventEnum.DISCONNECT_EVENT, () => {
+        delete onlineUsers[userId]
+        io.emit(ChatEventEnum.CHECK_ONLINE, Object.keys(onlineUsers))
+    });
 
 });
 

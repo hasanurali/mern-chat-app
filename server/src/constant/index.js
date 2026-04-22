@@ -30,5 +30,8 @@ module.exports.ChatEventEnum = {
 
     RECIVE_MESSAGE: "reciveMessage",
     DELETE_MESSAGE: "deleteMessage",
-    CHANGE_STATUS: "changeStatus"
+    CHANGE_STATUS: "changeStatus",
+
+    CHECK_ONLINE: "checkOnline",
+    CHECK_TYPING: "checkTyping"
 };
