@@ -27,4 +27,8 @@ module.exports.ChatEventEnum = {
 
     JOIN_CHAT_EVENT: "joinChat",
     LEAVE_CHAT_EVENT: "leaveChat",
+
+    RECIVE_MESSAGE: "reciveMessage",
+    DELETE_MESSAGE: "deleteMessage",
+    CHANGE_STATUS: "changeStatus"
 };
