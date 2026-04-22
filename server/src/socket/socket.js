@@ -21,11 +21,24 @@ io.on(ChatEventEnum.CONNECTED_EVENT, (socket) => {
 
     // Check online
     onlineUsers[userId] = socket.id;
+    
     io.emit(ChatEventEnum.CHECK_ONLINE, Object.keys(onlineUsers))
+
     socket.on(ChatEventEnum.DISCONNECT_EVENT, () => {
         delete onlineUsers[userId]
         io.emit(ChatEventEnum.CHECK_ONLINE, Object.keys(onlineUsers))
     });
+
+
+    // Check Typing
+    socket.on(ChatEventEnum.START_TYPING, (chatId) => {
+        socket.to(chatId).emit(ChatEventEnum.IS_TYPING, { userId, isTyping: true })
+    });
+
+    socket.on(ChatEventEnum.STOP_TYPING, (chatId) => {
+        socket.to(chatId).emit(ChatEventEnum.IS_TYPING, { userId, isTyping: false })
+    });
+
 
 });
 

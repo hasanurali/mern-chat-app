@@ -33,5 +33,7 @@ module.exports.ChatEventEnum = {
     CHANGE_STATUS: "changeStatus",
 
     CHECK_ONLINE: "checkOnline",
-    CHECK_TYPING: "checkTyping"
+    START_TYPING: "startTyping",
+    IS_TYPING: "isTyping",
+    STOP_TYPING: "stopTyping"
 };
