@@ -232,6 +232,455 @@ Include the access token in requests to protected endpoints via:
 
 ---
 
+## Chat Endpoints
+
+### 1. Create One-to-One Chat
+**Endpoint:** `POST /chat/one/:id`
+
+**Description:** Creates or retrieves a one-to-one chat with another user.
+
+**Authentication Required:** Yes (Bearer token or accessToken cookie)
+
+**Path Parameters:**
+- `id` (string) - ID of the user to chat with
+
+**Response:**
+```json
+{
+  "statusCode": 201,
+  "message": "Chat created",
+  "success": true,
+  "data": {
+    "_id": "string",
+    "chatName": "string",
+    "isGroupChat": false,
+    "members": ["string"],
+    "latestMessage": "object",
+    "createdAt": "ISO 8601 timestamp",
+    "updatedAt": "ISO 8601 timestamp"
+  }
+}
+```
+
+**Status Code:** 201 Created
+
+**Error Responses:**
+- `401` - Unauthorized (missing or invalid token)
+- `404` - User not found
+
+---
+
+### 2. Create Group Chat
+**Endpoint:** `POST /chat/group`
+
+**Description:** Creates a new group chat with multiple members.
+
+**Authentication Required:** Yes (Bearer token or accessToken cookie)
+
+**Request Body:**
+```json
+{
+  "name": "string (group name)",
+  "members": ["string (array of user IDs)"]
+}
+```
+
+**Response:**
+```json
+{
+  "statusCode": 201,
+  "message": "Group created",
+  "success": true,
+  "data": {
+    "_id": "string",
+    "chatName": "string",
+    "isGroupChat": true,
+    "members": ["string"],
+    "groupAdmin": "string",
+    "latestMessage": "object",
+    "createdAt": "ISO 8601 timestamp",
+    "updatedAt": "ISO 8601 timestamp"
+  }
+}
+```
+
+**Status Code:** 201 Created
+
+**Error Responses:**
+- `400` - Validation failed (missing name or members)
+- `401` - Unauthorized (missing or invalid token)
+
+---
+
+### 3. Fetch All Chats
+**Endpoint:** `GET /chat`
+
+**Description:** Retrieves all chats for the logged-in user.
+
+**Authentication Required:** Yes (Bearer token or accessToken cookie)
+
+**Response:**
+```json
+{
+  "statusCode": 200,
+  "message": "Chats fetched",
+  "success": true,
+  "data": [
+    {
+      "_id": "string",
+      "chatName": "string",
+      "isGroupChat": "boolean",
+      "members": ["string"],
+      "latestMessage": "object",
+      "createdAt": "ISO 8601 timestamp",
+      "updatedAt": "ISO 8601 timestamp"
+    }
+  ]
+}
+```
+
+**Status Code:** 200 OK
+
+**Error Responses:**
+- `401` - Unauthorized (missing or invalid token)
+
+---
+
+### 4. Fetch Specific Chat
+**Endpoint:** `GET /chat/:id`
+
+**Description:** Retrieves details of a specific chat.
+
+**Authentication Required:** Yes (Bearer token or accessToken cookie)
+
+**Path Parameters:**
+- `id` (string) - Chat ID
+
+**Response:**
+```json
+{
+  "statusCode": 200,
+  "message": "Chat fetched",
+  "success": true,
+  "data": {
+    "_id": "string",
+    "chatName": "string",
+    "isGroupChat": "boolean",
+    "members": ["string"],
+    "latestMessage": "object",
+    "createdAt": "ISO 8601 timestamp",
+    "updatedAt": "ISO 8601 timestamp"
+  }
+}
+```
+
+**Status Code:** 200 OK
+
+**Error Responses:**
+- `401` - Unauthorized (missing or invalid token)
+- `404` - Chat not found
+
+---
+
+### 5. Join Group Chat
+**Endpoint:** `POST /chat/join/:id`
+
+**Description:** Join an existing group chat.
+
+**Authentication Required:** Yes (Bearer token or accessToken cookie)
+
+**Path Parameters:**
+- `id` (string) - Group chat ID
+
+**Response:**
+```json
+{
+  "statusCode": 200,
+  "message": "User joined group",
+  "success": true,
+  "data": {
+    "_id": "string",
+    "chatName": "string",
+    "isGroupChat": true,
+    "members": ["string"],
+    "groupAdmin": "string",
+    "createdAt": "ISO 8601 timestamp",
+    "updatedAt": "ISO 8601 timestamp"
+  }
+}
+```
+
+**Status Code:** 200 OK
+
+**Error Responses:**
+- `401` - Unauthorized (missing or invalid token)
+- `404` - Group chat not found
+
+---
+
+### 6. Leave Group Chat
+**Endpoint:** `POST /chat/leave/:id`
+
+**Description:** Leave an existing group chat.
+
+**Authentication Required:** Yes (Bearer token or accessToken cookie)
+
+**Path Parameters:**
+- `id` (string) - Group chat ID
+
+**Response:**
+```json
+{
+  "statusCode": 200,
+  "message": "User left group",
+  "success": true,
+  "data": {
+    "_id": "string",
+    "chatName": "string",
+    "isGroupChat": true,
+    "members": ["string"],
+    "createdAt": "ISO 8601 timestamp",
+    "updatedAt": "ISO 8601 timestamp"
+  }
+}
+```
+
+**Status Code:** 200 OK
+
+**Error Responses:**
+- `401` - Unauthorized (missing or invalid token)
+- `404` - Group chat not found
+
+---
+
+### 7. Change Group Name
+**Endpoint:** `PUT /chat/name/:id`
+
+**Description:** Update the name of a group chat.
+
+**Authentication Required:** Yes (Bearer token or accessToken cookie)
+
+**Path Parameters:**
+- `id` (string) - Group chat ID
+
+**Request Body:**
+```json
+{
+  "name": "string (new group name)"
+}
+```
+
+**Response:**
+```json
+{
+  "statusCode": 200,
+  "message": "Group name updated",
+  "success": true,
+  "data": {
+    "_id": "string",
+    "chatName": "string",
+    "isGroupChat": true,
+    "members": ["string"],
+    "groupAdmin": "string",
+    "createdAt": "ISO 8601 timestamp",
+    "updatedAt": "ISO 8601 timestamp"
+  }
+}
+```
+
+**Status Code:** 200 OK
+
+**Error Responses:**
+- `400` - Validation failed (missing or invalid name)
+- `401` - Unauthorized (missing or invalid token)
+- `404` - Group chat not found
+
+---
+
+### 8. Delete Chat
+**Endpoint:** `DELETE /chat/:id`
+
+**Description:** Delete a chat (one-to-one or group).
+
+**Authentication Required:** Yes (Bearer token or accessToken cookie)
+
+**Path Parameters:**
+- `id` (string) - Chat ID
+
+**Response:**
+```json
+{
+  "statusCode": 200,
+  "message": "Chat deleted",
+  "success": true,
+  "data": null
+}
+```
+
+**Status Code:** 200 OK
+
+**Error Responses:**
+- `401` - Unauthorized (missing or invalid token)
+- `404` - Chat not found
+
+---
+
+## Message Endpoints
+
+### 1. Create Message
+**Endpoint:** `POST /message/:id`
+
+**Description:** Send a new message in a chat.
+
+**Authentication Required:** Yes (Bearer token or accessToken cookie)
+
+**Path Parameters:**
+- `id` (string) - Chat ID
+
+**Request Body:**
+```json
+{
+  "content": "string (message content)"
+}
+```
+
+**Response:**
+```json
+{
+  "statusCode": 201,
+  "message": "Message sent",
+  "success": true,
+  "data": {
+    "_id": "string",
+    "sender": "string (user ID)",
+    "content": "string",
+    "chat": "string (chat ID)",
+    "status": "sent",
+    "createdAt": "ISO 8601 timestamp",
+    "updatedAt": "ISO 8601 timestamp"
+  }
+}
+```
+
+**Status Code:** 201 Created
+
+**Error Responses:**
+- `400` - Validation failed (empty content)
+- `401` - Unauthorized (missing or invalid token)
+- `404` - Chat not found
+
+---
+
+### 2. Fetch Messages
+**Endpoint:** `GET /message/:id`
+
+**Description:** Retrieve all messages from a chat.
+
+**Authentication Required:** Yes (Bearer token or accessToken cookie)
+
+**Path Parameters:**
+- `id` (string) - Chat ID
+
+**Response:**
+```json
+{
+  "statusCode": 200,
+  "message": "Messages fetched",
+  "success": true,
+  "data": [
+    {
+      "_id": "string",
+      "sender": "string (user ID)",
+      "content": "string",
+      "chat": "string (chat ID)",
+      "status": "string (sent/delivered/read)",
+      "createdAt": "ISO 8601 timestamp",
+      "updatedAt": "ISO 8601 timestamp"
+    }
+  ]
+}
+```
+
+**Status Code:** 200 OK
+
+**Error Responses:**
+- `401` - Unauthorized (missing or invalid token)
+- `404` - Chat not found
+
+---
+
+### 3. Update Message Status
+**Endpoint:** `PUT /message/:id`
+
+**Description:** Update the read/delivery status of a message.
+
+**Authentication Required:** Yes (Bearer token or accessToken cookie)
+
+**Path Parameters:**
+- `id` (string) - Message ID
+
+**Request Body:**
+```json
+{
+  "status": "string (sent/delivered/read)"
+}
+```
+
+**Response:**
+```json
+{
+  "statusCode": 200,
+  "message": "Message status updated",
+  "success": true,
+  "data": {
+    "_id": "string",
+    "sender": "string (user ID)",
+    "content": "string",
+    "chat": "string (chat ID)",
+    "status": "string",
+    "createdAt": "ISO 8601 timestamp",
+    "updatedAt": "ISO 8601 timestamp"
+  }
+}
+```
+
+**Status Code:** 200 OK
+
+**Error Responses:**
+- `400` - Validation failed (invalid status)
+- `401` - Unauthorized (missing or invalid token)
+- `404` - Message not found
+
+---
+
+### 4. Delete Message
+**Endpoint:** `DELETE /message/:id`
+
+**Description:** Delete a message from a chat.
+
+**Authentication Required:** Yes (Bearer token or accessToken cookie)
+
+**Path Parameters:**
+- `id` (string) - Message ID
+
+**Response:**
+```json
+{
+  "statusCode": 200,
+  "message": "Message deleted",
+  "success": true,
+  "data": null
+}
+```
+
+**Status Code:** 200 OK
+
+**Error Responses:**
+- `401` - Unauthorized (missing or invalid token)
+- `404` - Message not found
+
+---
+
 ## Error Handling
 
 All endpoints return error responses in the following format:
@@ -248,6 +697,7 @@ All endpoints return error responses in the following format:
 ### Common Status Codes:
 - `400` - Bad Request (validation errors or user already exists)
 - `401` - Unauthorized (missing or invalid token, invalid credentials)
+- `403` - Forbidden (no permission)
 - `404` - Not Found (user not found)
 - `409` - Conflict (duplicate key, user already exists)
 - `429` - Too Many Requests (rate limit exceeded)

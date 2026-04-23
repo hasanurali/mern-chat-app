@@ -4,6 +4,8 @@ const swaggerUi = require('swagger-ui-express');
 const helmet = require('helmet')
 
 const authRoute = require('./routes/auth.route');
+const chatRoute = require('./routes/chat.route');
+const messageRoute = require('./routes/message.route');
 
 const errorHandler = require('./middlewares/error.middleware');
 const corsMiddleware = require('./config/cors.config');
@@ -24,6 +26,8 @@ app.use(sanitizeMiddleware);
 
 // Routes
 app.use('/api/v1/auth', authRoute);
+app.use('/api/v1/chat', chatRoute);
+app.use('/api/v1/message', messageRoute);
 
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
